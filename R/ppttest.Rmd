@@ -121,7 +121,7 @@ class: clear, middle, inverse
 ## Numerical variables
 
 ```{r, out.width = "70%", echo=FALSE, fig.align='center', fig.cap="Source: Allison Horst"}
-knitr::include_graphics("numerical.jpg")
+#knitr::include_graphics("numerical.jpg")
 ```
 
 ---
@@ -157,7 +157,7 @@ knitr::include_graphics("numerical.jpg")
 ## Categorical variables
 
 ```{r, out.width = "85%", echo=FALSE, fig.align='center', fig.cap="Source: Allison Horst"}
-knitr::include_graphics("categorical.jpg")
+#knitr::include_graphics("categorical.jpg")
 ```
 
 ---
@@ -254,7 +254,7 @@ $$f(x) =\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\rig
 where $\mu$ is the mean (i.e., average) and $\sigma$ is the standard deviation (will define soon). $\mu$ and $\sigma$ are **parameters** describing the population p.d.f.
 
 ```{r, out.width = "50%", echo=FALSE, fig.align='center'}
-knitr::include_graphics("normals.png")
+#knitr::include_graphics("normals.png")
 ```
 #### Many results in statistics rely on the assumption that our data are normally distributed. We will return to this distribution **frequently!**
 
@@ -544,7 +544,7 @@ theme(axis.text.x = element_text(size = 20))
 - Changes in the _standard deviation_ stretch the distribution out (or shrink it in)
 
 ```{r, out.width = "70%", echo=FALSE, fig.align='center'}
-knitr::include_graphics("normals.png")
+#knitr::include_graphics("normals.png")
 ```
 ---
 # Measures of spread: Quantiles
@@ -575,7 +575,7 @@ In our sample, quantiles are cut points of our sample data
 Common quantiles have names you have head of, such as _quartiles_ for $q=4$:
 
 ```{r, out.width = "50%", echo=FALSE, fig.align='center', fig.cap="Quartiles of the normal distribution"}
-knitr::include_graphics("quantiles_normal.png")
+#knitr::include_graphics("quantiles_normal.png")
 ```
 
 **Interpretation:** Q1 = first quartile, Q2 = second quartile, etc. The area below the red curve is the same below Q1 as it is between Q1 and Q2, between Q2 and Q3, and above Q3. 
@@ -733,7 +733,7 @@ geom_qq(aes(sample=ssn), color = "lightcoral", size=6) +
 --
 
 ```{r, out.width = "80%", echo=FALSE, fig.align='center', fig.cap="Source: IMS, Ch. 5.6"}
-knitr::include_graphics("loan_distribution.png")
+#knitr::include_graphics("loan_distribution.png")
 ```
 
 ---
@@ -750,7 +750,7 @@ knitr::include_graphics("loan_distribution.png")
 --
 
 ```{r, out.width = "80%", echo=FALSE, fig.align='center', fig.cap="Source: IMS, Ch. 5.6"}
-knitr::include_graphics("robusttable.png")
+#knitr::include_graphics("robusttable.png")
 ```
 
 ---
@@ -768,7 +768,7 @@ Suppose we have a **random** sample of some size $n$. How well does $\bar x$ app
 
 $$\bar{x} \rightarrow \mu \hskip2mm \text{as} \hskip2mm n \rightarrow \infty $$
 ```{r, out.width = "45%", echo=FALSE, fig.align='center', fig.cap="Source: IMS, Ch. 5.6"}
-knitr::include_graphics("lln.png")
+#knitr::include_graphics("lln.png")
 ```
 ---
 # Next up
