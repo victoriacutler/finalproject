@@ -1,0 +1,150 @@
+---
+title: "stats final"
+author: "Victoria Cutler"
+date: "2022-12-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rootdir <- "/Users/victoriacutler/Documents/MEDS/Courses/EDS222/finalproject"
+datadir <- "/Users/victoriacutler/Documents/MEDS/Courses/EDS222/finalproject/data"
+
+setwd(rootdir)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Notes
+
+import relevent libraries
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(stringr)
+```
+
+set working directories
+```{r}
+```
+
+
+reading in data
+```{r}
+rawdata_solar <- read_csv(here("Courses","EDS222", "finalproject","data", "project-sunroof-census_tract.csv"))
+
+solar_meta <- read_csv(here("Courses","EDS222", "finalproject","data", "metadata.csv"))
+
+rawdata_income <- read_csv(here("Courses","EDS222", "finalproject","data", "2022CensusMsaStateCountyTractWithIncomeInd.csv"))
+```
+
+data quality exploration
+```{r}
+summary(rawdata_solar) # checking mins and maxes and signs. percent_covered has a weird range.
+summary(rawdata_income)
+head(rawdata_income)
+```
+
+basic data vis / exploration for solar data
+```{r}
+#could also do some mapping and bring in a shapefile of census tracts
+
+# adding the column we care about which is how many are installed vs can be installed
+censustract_solardata <- rawdata_solar |> 
+  mutate(percent_without_solar = (existing_installs_count/count_qualified) * 100) |> # small numbers mean that this census tract is not living up to it's potential in terms of solar! 
+  #mutate(percent_without_solar = (existing_installs_count/count_qualified) * 100, na.rm = TRUE) |> 
+  rename(census_tract_id = region_name) #|> 
+  #filter(is.na(yearly_sunlight_kwh_median) == FALSE)
+
+# data distribution
+ggplot(data = censustract_solardata, aes(x = percent_without_solar)) +
+  geom_histogram()
+  
+  # the distribution looks more normal when we log it:
+ggplot(data = censustract_solardata, aes(x = log(percent_without_solar))) +
+  geom_histogram() 
+```
+
+basic data vis / exploration for income data:
+```{r}
+censustract_incomedata <- rawdata_income |> 
+  clean_names() |> 
+  mutate(state_code = as.character(state_code)) |> 
+  mutate(county_code = as.character(county_code)) |> 
+  mutate(tract = as.character(tract))
+
+censustract_incomedata$state_code <- str_pad(censustract_incomedata$state_code, 2, pad = "0")
+censustract_incomedata$county_code <- str_pad(censustract_incomedata$county_code, 3, pad = "0")
+censustract_incomedata$tract <- str_pad(censustract_incomedata$tract, 6, pad = "0")
+
+censustract_incomedata2 <-  censustract_incomedata |> 
+  mutate(census_tract_id = paste0(state_code, county_code, tract))
+
+```
+
+joining dataframes of interest by census tract:
+```{r}
+solar_income <- inner_join(censustract_incomedata2, censustract_solardata, by = "census_tract_id")
+
+# basic data visuals
+ggplot(data = solar_income, aes(x = tract_med_family_income, y = percent_without_solar)) +
+  geom_smooth()
+
+ggplot(data = solar_income, aes(x = yearly_sunlight_kwh_median, y = percent_without_solar)) +
+  geom_smooth()
+```
+
+
+make a linear regression:
+- also want to look at census tract safety and/or census tract race and/or census tract homeownership
+```{r}
+
+solar_income_noNAorInf <- solar_income
+solar_income_noNAorInf[is.na(solar_income_noNAorInf) | solar_income_noNAorInf == "Inf"] <- NA
+mod <- lm(percent_without_solar ~ tract_med_family_income + yearly_sunlight_kwh_total + as.factor(state_code),
+        data = solar_income_noNAorInf) # interesting that using total sunlight predicts more than using median sunlight
+summary(mod)
+```
+# just looking at california:
+```{r}
+california_stats <- solar_income_noNAorInf |> 
+  filter(state_code == "01")
+
+mod_ca <- lm(percent_without_solar ~ tract_med_family_income + yearly_sunlight_kwh_total, 
+        data = california_stats)
+summary(mod_ca)
+```
+
+# what are the states with the highest propensity for solar?
+```{r}
+
+state_solar_propensity <- solar_income_noNAorInf |> 
+  group_by(state_code) |> 
+  summarise(total_census_tracts = n(), total_count_qualified = sum(count_qualified)) |> 
+  mutate(average_qualified = total_count_qualified/total_census_tracts)
+```
+
+```{r}
+library(rgdal)
+library(tidycensus)
+options(tigris_use_cache = TRUE)
+
+dc_income <- get_acs(
+  geography = "tract", 
+  variables = "B19013_001",
+  state = "DC", 
+  year = 2020,
+  geometry = TRUE
+)
+
+dc_income
+```
+
+# for further study:
+- google project sunroof could look at residential vs non-residental by using building size 
+- limitations of my study: census tracts have so much diversity 
+
+# my next step:
+- run one of those regressions where the impact of income and kwh changes based off of the state we're in? or graph the coeffecients for each state to see the impact 
+- add a shapefile that has the polygons for each census tract (multipolygon shapefile of census tracts?)
+- add the shape file and then i can look at area to determine average solar capacity per state 
