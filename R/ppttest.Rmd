@@ -1,9 +1,9 @@
 ---
-title: "Summarizing data"
-subtitle: "EDS 222"
-author: "Tamma Carleton"
+title: "Rooftop Solar"
+subtitle: "The Good and The Bad"
+author: "Victoria Cutler"
 #institute: ""
-date: "Fall 2022"
+date: "December 6 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -19,8 +19,6 @@ library(pacman)
 p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp)
 # Define pink color
 red_pink <- "#e64173"
-# Notes directory
-dir_slides <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_code/EDS-222-stats/slides/02-summstats/"
 # Knitr options
 opts_chunk$set(
   comment = "#>",
@@ -62,70 +60,159 @@ theme_simple <- theme_bw() + theme(
 
 name: Overview
 
-# Today
+# Some Pros of Rooftop Solar
 
-####  Types of variables
-- Categorical, numerical, ordinal, ... 
+```{r, out.width = "70%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("rooftopsolar.png")
+```
 
---
-
-#### Probability density functions
-- Definitions, the normal pdf, skew
-
---
-
-#### Summary statistics
-- Central tendency and spread, quantiles, outliers
-
---
-
-#### Law of large numbers
-- How big does my sample need to be? 
+- **It's clean**
 
 ---
+# Some Pros of Rooftop Solar
 
+```{r, out.width = "70%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("rooftopsolar.png")
+```
+- It's clean
+
+- **It helps you save money**
+
+---
+# Some Pros of Rooftop Solar
+
+```{r, out.width = "70%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("rooftopsolar.png")
+```
+
+- It's clean
+
+- It helps you save money
+
+- **It makes you feel good about yourself**
+
+---
 layout: false
 class: clear, middle, inverse
-# Assignment #1 check-in: How's it going?
-
-### Reminder: OH Tuesdays, Pine Room, 3:30-4:30pm
-
+# Lesser Known Cons of Rooftop Solar
 ---
-layout: false
-class: clear, middle, inverse
-# Types of variables
----
+# Lesser Known Cons of Rooftop Solar
 
-# Types of variables
+## Equity Issues Part 1
+### Less Access to Solar
+```{r, echo = FALSE}
+library(DiagrammeR)
+DiagrammeR::grViz("digraph {
 
-## Numerical variables
-> Object class `numeric` in `R`
-- Can take on a wide range of possible values
-- Makes sense to add, subtract, multiply, etc.
+graph [layout = dot, rankdir = LR]
 
---
- 
-- Examples: 
-  + Height of the tree canopy across the Amazon
-  + Length of Atlantic swordfish
-  + Daily average temperature
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = rectangle, style = filled, fillcolor = Linen]
 
-#### **Discrete** numerical variables take on only a limited set of values, often counts (e.g., population)
-#### **Continuous** numerical variables: can take on infinite values within a range (e.g., arsenic concentration in groundwater)
+accessissue1 [label = 'high upfront cost', fillcolor = Beige]
+accessissue2 [label = 'on an opt in basis', fillcolor = Beige]
+accessissue3 [label = 'less renter autonomy', fillcolor = Beige]
+lessaccess [label =  'less acccess for \n low income households']
+results [label= 'missed monetary \n savings']
 
-
----
-
-# Types of variables
-
-## Numerical variables
-
-```{r, out.width = "70%", echo=FALSE, fig.align='center', fig.cap="Source: Allison Horst"}
-#knitr::include_graphics("numerical.jpg")
+# edge definitions with the node IDs
+{accessissue1 accessissue2 accessissue3}  -> lessaccess -> results
+}")
 ```
 
 ---
+# Lesser Known Cons of Rooftop Solar
 
+## Equity Issues Part 2
+### More Cost Shifts to Those Without Solar
+```{r, echo = FALSE}
+library(DiagrammeR)
+DiagrammeR::grViz("digraph {
+
+graph [layout = dot, rankdir = LR]
+
+# define the global styles of the nodes. We can override these in box if we wish
+node [shape = rectangle, style = filled, fillcolor = Linen]
+
+cost [label = 'cost shift to \n those without solar', fillcolor = Beige]
+results [label = 'monetary costs']
+
+# edge definitions with the node IDs
+{cost}  -> results
+}")
+```
+
+---
+layout: false
+class: clear, middle, inverse
+# **Study Objective**
+## Given this, I wanted to take a look at the relationship between income and solar adoption across (1) the whole **United States**, and (2) in **California**, since solar policy reform is underway to help lessen this issue.  
+---
+
+---
+layout: false
+class: clear, middle, inverse
+# California Regressions
+---
+# Shapes of probability distributions
+
+## Uni-, bi-, and multi-modal
+#### (How many "peaks" do you see?)
+```{R, examplebimodal, echo = F, fig.height = 3}
+df_modes <- tibble(
+  uni   = rchisq(100, 6),
+  bi    = c(rchisq(40, 5.8), rnorm(60, 20, 2)),
+  multi =  c(rchisq(40, 3), rnorm(40, 15), rnorm(20, 25, 1.5))
+)
+p_uni   <- ggplot(df_modes, aes(x = uni)) + 
+  geom_histogram(binwidth = 1, fill="grey85") +
+  labs(x = NULL, y = NULL) +
+  ylim(0, 23) +
+  xlim(0, 30) + theme_simple
+p_bi    <- ggplot(df_modes, aes(x = bi)) + 
+  geom_histogram(binwidth = 1, fill="grey85") +
+  labs(x = NULL, y = NULL) +
+  ylim(0, 23) +
+  xlim(0, 30)+ theme_simple
+p_multi <- ggplot(df_modes, aes(x = multi)) + 
+  geom_histogram(binwidth = 1, fill="grey85") +
+  labs(x = NULL, y = NULL) +
+  ylim(0, 23) +
+  xlim(0, 30)+ theme_simple
+plot_grid(p_uni, p_bi, p_multi, nrow = 1)
+```
+---
+
+# Describing random variables
+
+A probability density function describes a **population**
+
+As we learned last week, we rarely have a **census** so we rarely can directly describe the p.d.f. itself.
+
+--
+
+Instead, we use **statistics** from a _sample_ to estimate **parameters** of the _population_. Randomness in sampling means we call the variables in our sample "random variables"
+
+```{R, examplepdf3, echo = F, fig.height = 3.25}
+# Generate data for density's polygon
+set.seed(1298)
+tmp <- tibble(x = seq(-4, 4, 0.01), y = dnorm(x))
+tmp <- rbind(tmp, tibble(x = seq(4, -4, -0.01), y = 0))
+samp <- as.data.frame(rnorm(100))
+  colnames(samp) = "x"
+# Plot it
+g = ggplot(data = tmp, aes(x, y)) +
+  geom_polygon(fill = "grey85") +
+  geom_hline(yintercept = 0, color = "black") +
+  theme_simple + ggtitle("population")
+s = ggplot(data = samp, aes(x=x)) +
+  geom_histogram(fill="grey85") +
+  geom_hline(yintercept = 0, color = "black") +
+  theme_simple + ggtitle("sample (n=100)")
+plot_grid(g,s, labels = list("population", "sample"))
+```
+
+---
 # Types of variables
 
 ## Categorical variables

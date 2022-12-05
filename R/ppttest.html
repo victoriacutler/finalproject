@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Summarizing data</title>
+    <title>Rooftop Solar</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Tamma Carleton" />
+    <meta name="author" content="Victoria Cutler" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
     <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/viz/viz.js"></script>
+    <link href="libs/DiagrammeR-styles/styles.css" rel="stylesheet" />
+    <script src="libs/grViz-binding/grViz.js"></script>
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -15,16 +19,16 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Summarizing data
+# Rooftop Solar
 ]
 .subtitle[
-## EDS 222
+## The Good and The Bad
 ]
 .author[
-### Tamma Carleton
+### Victoria Cutler
 ]
 .date[
-### Fall 2022
+### December 6 2022
 ]
 
 ---
@@ -34,66 +38,57 @@ class: center, middle, inverse, title-slide
 
 name: Overview
 
-# Today
+# Some Pros of Rooftop Solar
 
-####  Types of variables
-- Categorical, numerical, ordinal, ... 
+&lt;img src="rooftopsolar.png" width="70%" style="display: block; margin: auto;" /&gt;
 
---
-
-#### Probability density functions
-- Definitions, the normal pdf, skew
-
---
-
-#### Summary statistics
-- Central tendency and spread, quantiles, outliers
-
---
-
-#### Law of large numbers
-- How big does my sample need to be? 
+- **It's clean**
 
 ---
+# Some Pros of Rooftop Solar
 
-layout: false
-class: clear, middle, inverse
-# Assignment #1 check-in: How's it going?
+&lt;img src="rooftopsolar.png" width="70%" style="display: block; margin: auto;" /&gt;
+- It's clean
 
-### Reminder: OH Tuesdays, Pine Room, 3:30-4:30pm
+- **It helps you save money**
+
+---
+# Some Pros of Rooftop Solar
+
+&lt;img src="rooftopsolar.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+- It's clean
+
+- It helps you save money
+
+- **It makes you feel good about yourself**
 
 ---
 layout: false
 class: clear, middle, inverse
-# Types of variables
+# Lesser Known Cons of Rooftop Solar
 ---
+# Lesser Known Cons of Rooftop Solar
 
-# Types of variables
-
-## Numerical variables
-&gt; Object class `numeric` in `R`
-- Can take on a wide range of possible values
-- Makes sense to add, subtract, multiply, etc.
-
---
- 
-- Examples: 
-  + Height of the tree canopy across the Amazon
-  + Length of Atlantic swordfish
-  + Daily average temperature
-
-#### **Discrete** numerical variables take on only a limited set of values, often counts (e.g., population)
-#### **Continuous** numerical variables: can take on infinite values within a range (e.g., arsenic concentration in groundwater)
-
+## Equity Issues Part 1
+### Less Access to Solar
+<div id="htmlwidget-816782e2d38e5ef59fe9" style="width:756px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-816782e2d38e5ef59fe9">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\naccessissue1 [label = \"high upfront cost\", fillcolor = Beige]\naccessissue2 [label = \"on an opt in basis\", fillcolor = Beige]\naccessissue3 [label = \"less renter autonomy\", fillcolor = Beige]\nlessaccess [label =  \"less acccess for \n low income households\"]\nresults [label= \"missed monetary \n savings\"]\n\n# edge definitions with the node IDs\n{accessissue1 accessissue2 accessissue3}  -> lessaccess -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ---
+# Lesser Known Cons of Rooftop Solar
 
-# Types of variables
+## Equity Issues Part 2
+### More Cost Shifts to Those Without Solar
+<div id="htmlwidget-d02994f33474addff4ee" style="width:756px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d02994f33474addff4ee">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\ncost [label = \"cost shift to \n those without solar\", fillcolor = Beige]\nresults [label = \"monetary costs\"]\n\n# edge definitions with the node IDs\n{cost}  -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
-## Numerical variables
-
-
-
+---
+layout: false
+class: clear, middle, inverse
+# **Study Objective**
+## Given this, I wanted to take a look at the relationship between income and solar adoption across 1. the whole **United States**, and 
+2. in **California**, since solar policy reform is underway to help lessen this issue.  
 ---
 
 # Types of variables
