@@ -56,31 +56,20 @@ name: Overview
 - **It helps you save money**
 
 ---
-# **Some Well Known Pros of Rooftop Solar**
-
-&lt;img src="rooftopsolar.png" width="70%" style="display: block; margin: auto;" /&gt;
-
-- It's clean
-
-- It helps you save money
-
-- **It makes you feel good about yourself**
-
----
 layout: false
 class: clear, middle, inverse
 # **Some Lesser Known Cons of Rooftop Solar**
 ---
 # **Some Lesser Known Cons of Rooftop Solar**
 ### (1) Solar Is Less Accessible to Lower Income Households
-<div id="htmlwidget-40a1e229b4da73256595" style="width:756px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-40a1e229b4da73256595">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\naccessissue1 [label = \"high upfront costs\", fillcolor = Beige]\naccessissue2 [label = \"must opt in\", fillcolor = Beige]\naccessissue3 [label = \"rentership barriers\", fillcolor = Beige]\nlessaccess [label =  \"lower accessibility for \n low income (LI) households\", fillcolor = Beige]\nresults [label= \"missed monetary savings \n for LI households\"]\n\n# edge definitions with the node IDs\n{accessissue1 accessissue2 accessissue3}  -> lessaccess -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-7202daa2b37266d97643" style="width:756px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7202daa2b37266d97643">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\naccessissue1 [label = \"high upfront costs\", fillcolor = Beige]\naccessissue2 [label = \"must opt in\", fillcolor = Beige]\naccessissue3 [label = \"rentership barriers\", fillcolor = Beige]\nlessaccess [label =  \"lower accessibility for \n low income (LI) households\", fillcolor = Beige]\nresults [label= \"missed monetary savings \n for LI households\"]\n\n# edge definitions with the node IDs\n{accessissue1 accessissue2 accessissue3}  -> lessaccess -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ---
-# **Lesser Known Cons of Rooftop Solar**
+# **Some Lesser Known Cons of Rooftop Solar**
 ### (2) More Cost Shifts to Those Without Solar
-<div id="htmlwidget-ebdb67061686123772fa" style="width:756px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ebdb67061686123772fa">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\ncostissue [label = \"households with solar sell back \n at a retail price point\", fillcolor = Beige]\ncost [label = \"cost shift to \n those without solar\", fillcolor = Beige]\nresults [label = \"monetary costs to \n those without solar\"]\n\n# edge definitions with the node IDs\ncostissue -> cost -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9e00a4e6e2e1954a5ba1" style="width:756px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9e00a4e6e2e1954a5ba1">{"x":{"diagram":"digraph {\n\ngraph [layout = dot, rankdir = LR]\n\n# define the global styles of the nodes. We can override these in box if we wish\nnode [shape = rectangle, style = filled, fillcolor = Linen]\n\ncostissue [label = \"households with solar sell back \n at a retail price point\", fillcolor = Beige]\ncost [label = \"cost shift to \n those without solar\", fillcolor = Beige]\nresults [label = \"monetary costs to \n those without solar\"]\n\n# edge definitions with the node IDs\ncostissue -> cost -> results\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 ---
 layout: false
@@ -103,7 +92,7 @@ class: clear, middle, inverse
 # **Regression: California Case Study**
 ---
 # **Regression: California Case Study**
-- Equation: `$$pctsolar_i=-1.565 + 0.0002466 \cdot solargen_i + 3.622 \cdot income_i + \varepsilon_i$$`
+- Equation: `$$pctsolarsat_i=-1.565 + 0.0002466 \cdot solargen_i + 3.622 \cdot income_i + \varepsilon_i$$`
 - Adjusted R&lt;sup&gt;2&lt;/sup&gt;: 0.3599
 - p-value: &lt; 2.2e-16
 &lt;img src="solarpotential_regression_graph.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -149,22 +138,12 @@ class: clear, middle, inverse
 - p-value: &lt; **2.2e-16**
 ---
 # **What does it all mean?**
-## Revisiting the Flow Charts
 ###Bad News:
-- this means we see more affluent neighborhoods with solar, even with the same generation potential
-  - and the mean difference in solar saturation between high income census tracts and low income census tracts is significant
-  - this may be due to the access issues mentioned earlier
-- the mean difference in number of buildings with solar between high income census tracts and low income census tracts is significant
-  - this is leading to the inequitable cost shifting onto lower-income households
+- this means we see more affluent neighborhoods with solar
 ---
 # **What does it all mean?**
-## Revisiting the Flow Charts
 ###Bad News:
-- this means we see more affluent neighborhoods with solar, even with the same generation potential
-  - and the mean difference in solar saturation between high income census tracts and low income census tracts is significant
-  - this may be due to the access issues mentioned earlier
-- the mean difference in number of buildings with solar between high income census tracts and low income census tracts is significant
-  - this is leading to the inequitable cost shifting onto lower-income households
+- this means we see more affluent neighborhoods with solar
 
 ###Good News:
 - there is still a lot of potential for rooftop solar!
@@ -174,14 +153,9 @@ class: clear, middle, inverse
 
 ## Check out my [blog post](https://victoriacutler.github.io/posts/2022-12-04-22-solar-equity/) on 12/9 (but don't judge my website) for more details and analyses 
 
----
+- Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
-class: center, middle
-
-
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
-
-Slide template was borrowed from [Tamma Carleton's](https://github.com/tcarleton/EDS-222-stats) github for our EDS222 course materials.
+- Slide template was borrowed from [Tamma Carleton's](https://github.com/tcarleton/EDS-222-stats) github for our EDS222 course materials.
 
 ---
 exclude: true

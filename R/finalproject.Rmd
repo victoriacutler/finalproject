@@ -19,6 +19,15 @@ library(stringr)
 library(spData)
 library(tmap)
 library(broom)
+
+library(tidyverse)
+library(readr)
+library(gt)
+library(openintro)
+library(ggplot2)
+library(modelr)
+library(knitr)
+library(xtable)
 ```
 
 ## Reading In The Data
@@ -196,7 +205,8 @@ cleandata_ca_incomestatus <- cleandata |>
   mutate(income_status = case_when(tract_med_family_income <= 143100 ~ "low/mod",
                                    tract_med_family_income > 143100 ~ "mod/high")) |> 
   filter(state_name == "California") |> 
-  mutate(log_number_of_panels_total = log(number_of_panels_total))
+  mutate(log_number_of_panels_total = log(number_of_panels_total)) |> 
+  mutate(income_status = as.factor(income_status))
 
 income_solar_sum_stats <- cleandata_ca_incomestatus |> 
   group_by(income_status) |> 
@@ -248,10 +258,7 @@ t_test_p_value <- t_test_output$p.value
 \^ that could mean that there are way bigger buildings or energy use that leads to this gap. for california also look at difference in means of solar install COUNTS in rich vs poor census tracts
 
 ```{r}
-cleandata_ca_incomestatus <- cleandata |> 
-  mutate(income_status = case_when(tract_med_family_income <= 143100 ~ "low/mod",
-                                   tract_med_family_income > 143100 ~ "mod/high")) |> 
-  filter(state_name == "California")
+
 
 income_solar_sum_stats <- cleandata_ca_incomestatus |> 
   group_by(income_status) |> 
@@ -295,7 +302,7 @@ SE <- as.numeric(sqrt(stdev_highincome^2 / n_highincome + stdev_lowincome^2/n_lo
 zscore <- as.numeric((solar_dif - 0) / SE)
 
 
-t_test_output <- t.test(number_of_panels_total ~ income_status, data = cleandata_ca_incomestatus, conf.level = 0.95)
+t_test_output <- t.test(existing_installs_count ~ income_status, data = no_outliers_n, conf.level = 0.95)
 t_test_p_value <- t_test_output$p.value
 
 # now t's run a regression on number of panels (or log of number of panels)
@@ -387,3 +394,174 @@ addPolygons()
 -   add a shapefile that has the polygons for each census tract (multipolygon shapefile of census tracts?)
 -   add the shape file and then i can look at area to determine average solar capacity per state
 -   look at if there is a significant difference in means between rich people and less affluent people when normalizing for the state / solar irradiance itself
+
+```{r}
+
+
+#only keep rows in dataframe that have values within 1.5*IQR of Q1 and Q3
+no_outliers <- subset(cleandata_ca_incomestatus, cleandata_ca_incomestatus$yearly_sunlight_kwh_median > (Q1 - 1.5*IQR) & cleandata_ca_incomestatus$yearly_sunlight_kwh_median < (Q3 + 1.5*IQR))
+
+mod_ca <- lm(pct_qual_without_solar ~ income_status + yearly_sunlight_kwh_median, data = no_outliers)
+summary(mod_ca)
+
+no_outliers %>% 
+  ggplot(aes(x = yearly_sunlight_kwh_median, y = pct_qual_without_solar, color = income_status)) +
+  #geom_point(alpha = 0.5) +
+  geom_line(data = augment(mod_ca), aes(y = .fitted, color = income_status)) + 
+  labs(x = "yearly_sunlight_kwh_median",
+       y = "pct_qual_without_solar") +
+  scale_colour_discrete("income_status")
+
+res <- resid(mod_ca)
+#qqnorm(res)
+
+#plot(mod, which=2)
+
+ggplot(data = mod_ca, aes(sample = res)) +
+  geom_qq() +
+  geom_qq_line()
+
+no_outliers |> 
+  ggplot(aes(x=yearly_sunlight_kwh_median, y = pct_qual_without_solar, color = income_status)) +
+  geom_point() +
+  geom_line(data = augment(mod_ca), aes(y=.fitted))
+
+# number of solar panels mod
+
+#find Q1, Q3, and interquartile range for values in column A
+Q1_n <- quantile(no_outliers$number_of_panels_total, .25)
+Q3_n <- quantile(no_outliers$number_of_panels_total, .75)
+IQR_n <- IQR(no_outliers$number_of_panels_total)
+
+#only keep rows in dataframe that have values within 1.5*IQR of Q1 and Q3
+no_outliers_n <- subset(no_outliers, no_outliers$number_of_panels_total > (Q1_n - 1.5*IQR_n) & no_outliers$number_of_panels_total < (Q3_n + 1.5*IQR_n))
+
+
+mod_ca_number <- lm(number_of_panels_total ~ income_status + yearly_sunlight_kwh_median, data = no_outliers_n)
+summary(mod_ca_number)
+
+
+no_outliers_n |> 
+  ggplot(aes(x=yearly_sunlight_kwh_median, y = number_of_panels_total, color = income_status)) +
+  #geom_point() +
+  geom_line(data = augment(mod_ca_number), aes(y=.fitted))
+```
+
+```{r}
+#find Q1, Q3, and interquartile range for values in column A
+Q1 <- quantile(cleandata_ca_incomestatus$yearly_sunlight_kwh_median, .25)
+Q3 <- quantile(cleandata_ca_incomestatus$yearly_sunlight_kwh_median, .75)
+IQR <- IQR(cleandata_ca_incomestatus$yearly_sunlight_kwh_median)
+
+#only keep rows in dataframe that have values within 1.5*IQR of Q1 and Q3
+no_outliers <- subset(cleandata_ca_incomestatus, cleandata_ca_incomestatus$yearly_sunlight_kwh_median > (Q1 - 1.5*IQR) & cleandata_ca_incomestatus$yearly_sunlight_kwh_median < (Q3 + 1.5*IQR))
+
+mod_ca <- lm(pct_qual_without_solar ~ income_status + yearly_sunlight_kwh_median, data = no_outliers)
+summary(mod_ca)
+
+mod_ca  %>%
+  summary() %>% 
+  xtable() %>% 
+  kable()
+
+no_outliers %>% 
+  ggplot(aes(x = yearly_sunlight_kwh_median, y = pct_qual_without_solar, color = income_status)) +
+  geom_point(alpha = 0.5) +
+  geom_line(data = augment(mod_ca), aes(y = .fitted, color = income_status)) + 
+  labs(x = "Median Rooftop Yearly Solar Generation Potential (kWh)",
+       y = "Percent of Rooftops Suitable for \n Solar that Already Have Solar",
+       title = "Solar Potential Actualized") +
+  scale_colour_discrete(name = "Income Status",
+                        labels = c("Low to Moderate", "Moderate to High")) +
+  theme_classic()
+
+res <- resid(mod_ca)
+#qqnorm(res)
+
+#plot(mod, which=2)
+
+ggplot(data = mod_ca, aes(sample = res)) +
+  geom_qq() +
+  geom_qq_line()
+
+no_outliers |> 
+  ggplot(aes(x=yearly_sunlight_kwh_median, y = pct_qual_without_solar, color = income_status)) +
+  geom_point() +
+  geom_line(data = augment(mod_ca), aes(y=.fitted))
+
+# number of solar panels mod
+
+#find Q1, Q3, and interquartile range for values in column A
+Q1_n <- quantile(no_outliers$existing_installs_count, .25)
+Q3_n <- quantile(no_outliers$existing_installs_count, .75)
+IQR_n <- IQR(no_outliers$existing_installs_count)
+
+#only keep rows in dataframe that have values within 1.5*IQR of Q1 and Q3
+no_outliers_n <- subset(no_outliers, no_outliers$existing_installs_count > (Q1_n - 1.5*IQR_n) & no_outliers$existing_installs_count < (Q3_n + 1.5*IQR_n))
+
+
+mod_ca_number <- lm(existing_installs_count ~ income_status + yearly_sunlight_kwh_median, data = no_outliers_n)
+summary(mod_ca_number)
+
+
+no_outliers_n |> 
+  ggplot(aes(x=yearly_sunlight_kwh_median, y = number_of_panels_total, color = income_status)) +
+  #geom_point() +
+  geom_line(data = augment(mod_ca_number), aes(y=.fitted))
+```
+
+ca_data_inflogrm \<- cleandata_inflogrm \|\> R
+
+filter(state_name == "California")
+
+ggplot(data = ca_data_inflogrm, aes(x = pct_qual_without_solar)) +
+
+geom_histogram()
+
+ggplot(data = ca_data_inflogrm, aes(x = log_pct_qual_without_solar)) +
+
+geom_histogram()
+
+ggplot(data = ca_data_inflogrm, aes(sample = log_pct_qual_without_solar)) +
+
+geom_qq() +
+
+geom_qq_line()
+
+mod_ca \<- lm(log_pct_qual_without_solar \~ income_status + yearly_sunlight_kwh_median + income_status:yearly_sunlight_kwh_median, data = ca_data_inflogrm)
+
+summary(mod_ca)
+
+\# residuals are normally distributed
+
+res_ca \<- resid(mod_ca)
+
+ggplot(data = mod_ca, aes(sample = res_ca)) +
+
+geom_qq() +
+
+geom_qq_line()
+
+#mod_heart \<- glm(pct_qual_without_solar \~ income_level_ind + yearly_sunlight_kwh_median, data = ca_data, family= gaussian(link='log'))
+
+#summary(mod_heart)
+
+summary(mod_ca)
+
+ggplot(data = ca_data_inflogrm, aes(x = tract_med_family_income,y = log_pct_qual_without_solar, color = yearly_sunlight_kwh_median)) +
+
+geom_point() +
+
+geom_line(data = augment(mod_ca), aes(y = .fitted, color = yearly_sunlight_kwh_median))
+
+ggplot(data = ca_data_inflogrm, aes(x = yearly_sunlight_kwh_median,y = pct_qual_without_solar)) +
+
+geom_point()
+
+\## categorical income
+
+cleandata_inflogrm_ca \<- cleandata_ca_incomestatus
+
+cleandata_inflogrm_ca[is.na(cleandata_inflogrm_ca) \| cleandata_inflogrm_ca == "Inf" \| cleandata_inflogrm_ca == "-Inf"] \<- NA
+
+cleandata_inflogrm_ca \<- cleandata_inflogrm_ca \|\> drop_na()

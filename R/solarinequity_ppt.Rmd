@@ -84,19 +84,6 @@ knitr::include_graphics("rooftopsolar.png")
 - **It helps you save money**
 
 ---
-# **Some Well Known Pros of Rooftop Solar**
-
-```{r, out.width = "70%", echo=FALSE, fig.align='center'}
-knitr::include_graphics("rooftopsolar.png")
-```
-
-- It's clean
-
-- It helps you save money
-
-- **It makes you feel good about yourself**
-
----
 layout: false
 class: clear, middle, inverse
 # **Some Lesser Known Cons of Rooftop Solar**
@@ -124,7 +111,7 @@ results [label= 'missed monetary savings \n for LI households']
 ```
 
 ---
-# **Lesser Known Cons of Rooftop Solar**
+# **Some Lesser Known Cons of Rooftop Solar**
 ### (2) More Cost Shifts to Those Without Solar
 ```{r, echo = FALSE}
 library(DiagrammeR)
@@ -213,22 +200,12 @@ class: clear, middle, inverse
 - p-value: < **2.2e-16**
 ---
 # **What does it all mean?**
-## Revisiting the Flow Charts
 ###Bad News:
-- this means we see more affluent neighborhoods with solar, even with the same generation potential
-  - and the mean difference in solar saturation between high income census tracts and low income census tracts is significant
-  - this may be due to the access issues mentioned earlier
-- the mean difference in number of buildings with solar between high income census tracts and low income census tracts is significant
-  - this is leading to the inequitable cost shifting onto lower-income households
+- this means we see more affluent neighborhoods with solar
 ---
 # **What does it all mean?**
-## Revisiting the Flow Charts
 ###Bad News:
-- this means we see more affluent neighborhoods with solar, even with the same generation potential
-  - and the mean difference in solar saturation between high income census tracts and low income census tracts is significant
-  - this may be due to the access issues mentioned earlier
-- the mean difference in number of buildings with solar between high income census tracts and low income census tracts is significant
-  - this is leading to the inequitable cost shifting onto lower-income households
+- this means we see more affluent neighborhoods with solar
 
 ###Good News:
 - there is still a lot of potential for rooftop solar!
@@ -238,22 +215,17 @@ class: clear, middle, inverse
 
 ## Check out my [blog post](https://victoriacutler.github.io/posts/2022-12-04-22-solar-equity/) on 12/9 (but don't judge my website) for more details and analyses 
 
----
+- Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
-class: center, middle
-
-
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
-
-Slide template was borrowed from [Tamma Carleton's](https://github.com/tcarleton/EDS-222-stats) github for our EDS222 course materials.
+- Slide template was borrowed from [Tamma Carleton's](https://github.com/tcarleton/EDS-222-stats) github for our EDS222 course materials.
 
 ---
 exclude: true
 
-```{R, printpdfs, echo = F, eval = F}
+```{R, print pdfs, echo = F, eval = F}
 pagedown::chrome_print(
-  input = "02-summstats.html",
-  output = "02-summstats.pdf",
-  timeout = 90
+  input = "solarinequity_ppt.html",
+  output = "solarinequity_ppt.pdf",
+  timeout = 60
 )
 ```
